@@ -8,11 +8,17 @@ The codes I wrote are in the experiment folder.
 
 In the experiment folder:
 model divergence n=30 is a Matlab figure that shows how the model converges
+
 mymodel is the main code that builds the model
+
 scrapcode mainly contains scrape code I saved for testing purposes. It also has the code for the SVD
+
 training_model is similar to mymodel except it uses the training set instead of the full set
+
 test_error tests the tensor built in training_model by comparing a tensor that has not been decomposed by the model and the tensor from the training_model
+
 MakeModel is for the 5-fold CV to build a model from the training sets
+
 TestError tests the erro from the training sets from MakeModel 
 
 my own test.R is the R code used for exploratory data analysis, building the dataset, and linear regression
