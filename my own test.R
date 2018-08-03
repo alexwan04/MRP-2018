@@ -68,8 +68,8 @@ s <- s[s$readmissionFlag!=-1,]
 # min = 3   max = 15090
 # mean = 203.6609    med = 115   IQR = 156
 
-boxplot(s$LOS)
-boxplot(s$LOS,outline=FALSE) # no outliers
+boxplot(set_27var$LOS)
+boxplot(set_27var$LOS,outline=FALSE) # no outliers
 
 # bar chart of variables
 counts = table(s$Admitting.Service)
@@ -80,7 +80,7 @@ counts = table(s$LanguageType)
 b=barplot(counts, ylim = c(0,18000),xlab = "Language Type")
 text(x=b,y=counts+1000,labels = as.character(counts))
 
-counts = table(s$Gender)
+counts = table(set_27var$Gender)
 b=barplot(counts, ylim = c(0,10000),xlab = "Gender")
 text(x=b,y=counts+250,labels = as.character(counts))
 
@@ -92,17 +92,19 @@ counts = table(s$Triage.Level)
 b=barplot(counts, ylim = c(0,10000),xlab = "Triage Level")
 text(x=b,y=counts+250,labels = as.character(counts))
 
-counts = table(s$TriageMonth)
-b=barplot(counts, ylim = c(0,2000),xlab = "Triage Month")
-text(x=b,y=counts+150,labels = as.character(counts))
+counts = table(set_27var$TriageMonth)
+b=barplot(counts, ylim = c(0,1550),xlab = "Triage Month")
+text(x=b,y=counts+75,labels = as.character(counts))
 
-counts = table(s$TriageDayOfWeek)
+counts = table(set_27var$TriageDayOfWeek)
 b=barplot(counts, ylim = c(0,3000),xlab = "Triage Day of Week")
-text(x=b,y=counts+250,labels = as.character(counts))
+text(x=b,y=counts+150,labels = as.character(counts))
+set_27var$TriageDayOfWeek=droplevels(set_27var$TriageDayOfWeek)
 
-counts = table(s$NON_GIM_ER.CONSULT)
+counts = table(set_27var$NON_GIM_ER.CONSULT)
 b=barplot(counts, ylim = c(0,16000),xlab = "Non GIM ER Consult")
 text(x=b,y=counts+500,labels = as.character(counts))
+set_27var$NON_GIM_ER.CONSULT=droplevels(set_27var$NON_GIM_ER.CONSULT)
 
 counts = table(s$ConsultType_Count)
 b=barplot(counts, ylim = c(0,16000),xlab = "Consult Type Count")
@@ -120,7 +122,7 @@ counts = table(s$readmissionFlag)
 b=barplot(counts, ylim = c(0,16000),xlab = "Readmission Flag")
 text(x=b,y=counts+500,labels = as.character(counts))
 
-hist(s$WaitTime.to.Admit, xlab = 'Wait time to admit', main = 'Histogram of Wait Time to Admit')
+hist(set_27var$WaitTime.to.Admit, xlab = 'Wait time to admit', main = 'Histogram of Wait Time to Admit')
 
 counts = table(s$hasEncounter)
 b=barplot(counts, ylim = c(0,16000),xlab = "Has Encounter")
@@ -142,13 +144,32 @@ hist(s$totalLow,xlab="Total Low",main="Histogram of Total Low")
 
 hist(s$totalHigh,xlab="Total High",main="Histogram of Total High")
 
+set_27var$CT_HEAD_Count=droplevels(set_27var$CT_HEAD_Count)
+counts = table(set_27var$CT_HEAD_Count)
+b=barplot(counts, ylim = c(0,14000),xlab = "CT Head Count")
+text(x=b,y=counts+500,labels = as.character(counts))
+
+set_27var$POR_CHEST_Count=droplevels(set_27var$POR_CHEST_Count)
+counts = table(set_27var$POR_CHEST_Count)
+b=barplot(counts, ylim = c(0,15000),xlab = "POR Chest Count")
+text(x=b,y=counts+500,labels = as.character(counts))
+
+set_27var$RAD_CHEST_Count=droplevels(set_27var$RAD_CHEST_Count)
 counts = table(s$RAD_CHEST_Count)
 b=barplot(counts, ylim = c(0,11000),xlab = "RAD Chest Count")
 text(x=b,y=counts+500,labels = as.character(counts))
 
-counts = table(s$RAD_PELVIS_HIP_Count)
+set_27var$RAD_LOWER_EXT_Count=droplevels(set_27var$RAD_LOWER_EXT_Count)
+counts = table(set_27var$RAD_LOWER_EXT_Count)
+b=barplot(counts, ylim = c(0,17500),xlab = "RAD Lower EXT Count")
+text(x=b,y=counts+500,labels = as.character(counts))
+
+set_27var$RAD_PELVIS_HIP_Count=droplevels(set_27var$RAD_PELVIS_HIP_Count)
+counts = table(set_27var$RAD_PELVIS_HIP_Count)
 b=barplot(counts, ylim = c(0,17500),xlab = "RAD Pelvis Hip Count")
 text(x=b,y=counts+500,labels = as.character(counts))
+
+
 
 counts = table(s$RADtype_Count)
 b=barplot(counts, ylim = c(0,9500),xlab = "RAD Type Count")
@@ -238,18 +259,18 @@ saveRDS(s,file = "s.rds")
 s = subset(s,s$LOS <=4000)
 # change gender to Boolean: M = 1 F = 2
 i = 1
-levels(s$Gender) = c(levels(s$Gender),c(1,2))
+levels(set_27var$Gender) = c(levels(set_27var$Gender),c(1,2))
 while (i <= 16371){
-  if (s$Gender[[i]] == "M"){
-    s$Gender[[i]] = 1
+  if (set_27var$Gender[[i]] == 1){
+    set_27var$Gender[[i]] = "M"
     i = i + 1
   }
   else {
-    s$Gender[[i]] = 2
+    set_27var$Gender[[i]] = "F"
     i = i + 1
   }
 }
-
+set_27var$Gender=factor(set_27var$Gender)
 # change admit.via.ambulance to Boolean: N = 1 G = 2
 i = 1
 levels(s$Admit.via.Ambulance) = c(levels(s$Admit.via.Ambulance),c(1,2))
@@ -921,7 +942,120 @@ write.csv(smh_test, file = "smh_test.csv")
 
 fit = lm(LOS~.,data = set_27var)
 summary(fit)
+y=predict(fit,set_27var)
+mean(abs(set_27var$LOS-y)) #156.7804
 
 fit = lm(LOS~., data = smh_train)
-y=predict(fit,smh_test)
+LR_ans=predict(fit,smh_test)
 mean(abs(smh_test$LOS-y)) #154.3335
+
+library(corrplot)
+d = set_27var
+d$LOS=NULL
+indx = sapply(d, is.factor)
+d[indx]= lapply(d[indx],function(x) as.numeric(as.character(x)))
+d_cor = cor(d, method = "pearson")
+d_plot = corrplot(d_cor, method = 'circle')
+
+install.packages("R.matlab")
+library(R.matlab)
+
+SVD_ans = readMat("SVD_ans.mat")
+SVD_ans = SVD_ans$y
+
+TD_ans = readMat("TD_ans.mat")
+TD_ans = TD_ans$Xhisto
+
+KW = data.frame(set_27var$LOS,TD_ans,LR_ans,SVD_ans)
+Error_rates = data.frame(abs(set_27var$LOS-TD_ans),
+                         abs(set_27var$LOS-LR_ans),
+                         abs(set_27var$LOS-SVD_ans))
+colnames(Error_rates)=c("TD","LR","SVD")
+
+i=1
+mu=c()
+while(i<=16371){
+  mu=c(mu,mean(as.numeric(Error_rates[i,])))
+  i=i+1
+}
+R=c(abs(set_27var$LOS-TD_ans),abs(set_27var$LOS-LR_ans),abs(set_27var$LOS-SVD_ans))
+R=sort(R)
+R[24557] # = 92
+
+rank=Error_rates
+i=1
+while(i<=3){
+  j=1
+  while(j<=16371){
+    x=1
+    while(x<=49113){
+      if(rank[j,i]==R[x]){
+        rank[j,i]=x
+        j=j+1
+        x=49114
+      }
+      else{
+        x=x+1
+      }
+    }
+  }
+  i=i+1
+  print(i)
+}
+
+TD_error = abs(set_27var$LOS-TD_ans)
+LR_error = abs(set_27var$LOS-LR_ans)
+SVD_error = abs(set_27var$LOS-SVD_ans)
+
+TD_rank=c()
+LR_rank=c()
+SVD_rank=c()
+
+j=1
+while(j<=16371){
+  x=1
+  while(x<=49113){
+    if(TD_error[j]==R[x]){
+      TD_rank[j]=x
+      j=j+1
+      x=49114
+    }
+    else{
+      x=x+1
+    }
+  }
+}
+
+j=1
+while(j<=16371){
+  x=1
+  while(x<=49113){
+    if(LR_error[j]==R[x]){
+      LR_rank[j]=x
+      j=j+1
+      x=49114
+    }
+    else{
+      x=x+1
+    }
+  }
+}
+
+j=1
+while(j<=16371){
+  x=1
+  while(x<=49113){
+    if(SVD_error[j]==R[x]){
+      SVD_rank[j]=x
+      j=j+1
+      x=49114
+    }
+    else{
+      x=x+1
+    }
+  }
+}
+
+mean(TD_rank) # 14494
+mean(LR_rank) # 27782
+mean(SVD_rank) #29542
